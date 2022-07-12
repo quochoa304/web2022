@@ -1,0 +1,170 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Song index{% endblock %}
+
+{% block body %}
+    <style>
+
+        .list{
+            background-image: url({{ asset('images/music.jpg') }});
+            background-size: 200% 200%;
+            animation: gradient 80s ease infinite;
+            padding: 0;
+            margin: 0;
+            max-width: 1300px;
+            color: aquamarine;
+            height: 900px;
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .sidebar{
+            background:black;
+        }
+        .table{
+            color: aquamarine;
+        }
+        .resize1{
+            height: 30px;
+        }
+    </style>
+    <html>
+
+    </html>
+    <body>
+    <div class=" d-flex ">
+        <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white " style="width: 280px;">
+            <a href= {{ path('app_home') }} class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img class="bi pe-none me-2" width="40" height="32" src="{{ asset('images/home.png') }}" >
+            <span class="fs-4">H2 music</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column ">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">
+                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_artist_index') }}" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                        Artist
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                        Orders
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                        Products
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                        Customers
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/290757642_414407320701345_7858183408173586397_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=deTazUac1oMAX9itmP4&_nc_oc=AQmhalh7i8koO5o2hZRfd1NaKnBIbUvIb_Uk36mQ6BkNKCigEkK_W9OJaj2-rplOYig&_nc_ht=scontent.fsgn2-3.fna&oh=00_AT-7r2DQigAHMURArIJs9gA_LXMNnZ15exonocYh0Mi58g&oe=62C416E4" alt="" width="32" height="32" class="rounded-circle me-2">
+                    {% if app.user %}
+                        <strong>{{ app.user.username }}</strong>
+                    {% endif %}
+
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/{{ app.user ? 'logout' : 'login' }}">{{ app.user ? 'Logout' : 'Login' }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="list w-100">
+
+            <h1>Song List</h1>
+            <br>
+            <div>  &ensp; </div>
+            <table class="table">
+                <form action={{ path('app_song_index') }} method="get"  >
+                    Category:
+                    <select name="Category">
+                        <option value="" {{ (selectedCat=="ull") ? 'selected' }}> </option>
+                        <option value="edm" {{ (selectedCat=="edm") ? 'selected' }}> edm</option>
+                        <option value="lofi" {{ (selectedCat=="lofi") ? 'selected' }}> lofi</option>
+                        <option value="dance" {{ (selectedCat=="dance") ? 'selected' }}> dance</option>
+                        <option value="te" {{ (selectedCat=="te") ? 'selected' }}> te</option>
+                    </select>
+                    &ensp; <input type="submit" value="Filter" class="btn btn-primary">
+                    <br>
+                    <div>  &ensp; </div>
+                </form>
+                <form action={{ path('app_song_index') }} method="get"  >
+                <input type="string" name="name" class="form-control rounded mb-4"
+                       placeholder="Input song need to find !" aria-label="Search"
+                       aria-describedby="search-addon"/>
+                    <a href="{{ path('app_song_index') }}"
+                       class="btn btn-primary">Reset</a>
+                </form>
+                <br>
+                <div>  &ensp; </div>                    <br>
+                <div>  &ensp; </div>
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for song in songs %}
+                    <tr>
+                        <td>    <div class="iq-realese-song ">
+                                <a href="{{ path('app_song_player', {'id': song.id}) }}" tabindex="0"><img src="{{ asset(song.ImgUrl) }}" class="resize1 " alt=""></a>
+                                </div>
+                        </td>
+                        <td>{{ song.id }}</td>
+                        <td>{{ song.name }}</td>
+                        <td>{{ song.date ? song.date|date('Y-m-d') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_song_show', {'id': song.id}) }}">show</a>
+                            <a href="{{ path('app_song_edit', {'id': song.id}) }}">edit</a>
+                            <a href="{{ path('app_song_player', {'id': song.id}) }}">Play</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ path('app_song_new') }}">Create new</a>
+        </div>
+    </div>
+    </body>
+    <title>Music player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+{% endblock %}
